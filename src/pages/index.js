@@ -1,6 +1,92 @@
 import Head from 'next/head';
 
-export default function Home() {
+import data from '@/lib/data';
+import { useState } from 'react';
+
+function TitleSection({
+  title, address, project_type, year, ownership_type, availabilities_label,
+}) {
+  return (
+    <div>
+      <h2 className="text-2xl font-semibold text-99-dark mb-1">{title}</h2>
+      <p className="text-sm text-99-grey font-normal mb-3">{address}</p>
+      <p className="text-base text-99-dark font-normal">
+        {`${project_type} · ${year} · ${ownership_type}`}
+      </p>
+      <p className="text-base text-99-dark font-normal">
+        {availabilities_label}
+      </p>
+    </div>
+  );
+}
+
+function PriceSection({ psf_min, psf_max, subprice_label }) {
+  const AmountFormatter = new Intl.NumberFormat('en-SG', {
+    style: 'currency',
+    currency: 'SGD',
+    maximumFractionDigits: 0,
+  });
+
+  return (
+    <div className="flex flex-row md:flex-col">
+      <h3 className="text-lg font-semibold text-99-dark mr-3 mb-0 md:mb-1">
+        {`${AmountFormatter.format(psf_min)} - ${AmountFormatter.format(psf_max)}`}
+      </h3>
+      <p className="text-sm text-99-grey font-normal self-center md:self-baseline">{subprice_label}</p>
+    </div>
+  );
+}
+
+function DescriptionButton({ onClick }) {
+  return (
+    <button
+      className="text-base text-99-link font-semibold"
+      type="button"
+      onClick={onClick}
+    >
+      See description
+    </button>
+  );
+}
+
+function PhoneNumber({ children: number = '' }) {
+  const [isRevealed, reveal] = useState(false);
+  return (
+    <button
+      className="text-base text-99-dark font-normal"
+      onClick={() => reveal((prevReveal) => !prevReveal)}
+      type="button"
+    >
+      {isRevealed ? number : `${`${number.charAt(0)}XXX XXX`}`}
+    </button>
+  );
+}
+
+function Description({ children: description = '' }) {
+  const pattern = /^[3689]\d{7}$/;
+  const parts = description.split(pattern);
+
+  console.log(parts);
+  const elements = parts.map((part) => {
+    if (part.match(pattern)) {
+      return <PhoneNumber key={part}>{part}</PhoneNumber>;
+    }
+
+    return part;
+  });
+
+  return (
+    <div
+      aria-hidden
+      className="text-base text-99-dark font-normal whitespace-pre-wrap break-words"
+    >
+      {elements}
+    </div>
+  );
+}
+
+export default function Home({ listingData }) {
+  const [isDescriptionShown, showDescription] = useState(false);
   return (
     <>
       <Head>
@@ -10,13 +96,49 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="flex justify-center items-center h-screen">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-lg font-semibold mb-4">Card Title</h2>
-            <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in turpis vel velit sagittis hendrerit vel a nisi. Donec efficitur urna ut mi bibendum, ut ultrices justo lacinia. </p>
+        <div className="flex justify-center items-center p-3">
+          <div className="bg-white rounded shadow-2xl max-w-lg">
+            <div className="relative overflow-hidden">
+              <img
+                src={listingData.pic[0]}
+                alt={listingData.title}
+                className="object-cover rounded-t"
+              />
+              <div className="absolute top-1.5 left-0 z-10 bg-ribbon py-0.5 px-1 text-ribbon-text">
+                <p className="text-xs font-semibold">LAUNCHING SOON</p>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row justify-between">
+                <div className="basis-1 md:basis-1/2 md:mb-4">
+                  <TitleSection {...listingData} />
+                </div>
+                <div className="basis-1 md:basis-1/3 mt-3 mb-3 md:mt-0">
+                  <PriceSection {...listingData} />
+                </div>
+              </div>
+              <div className="flex flex-row justify-end">
+                {!isDescriptionShown && <DescriptionButton onClick={() => showDescription(true)} />}
+                {isDescriptionShown && (
+                  <Description>
+                    {listingData.description}
+                  </Description>
+                )}
+                <span className="sr-only">{listingData.description}</span>
+              </div>
+            </div>
           </div>
+
         </div>
       </main>
     </>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      listingData: data,
+    },
+  };
 }
