@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import JsxParser from 'react-jsx-parser';
 
+const phonePattern = /[3689]\d{1,3}\s?\d{4}/g;
+
 function TitleSection({
   title, address, project_type, year, ownership_type, availabilities_label,
 }) {
@@ -77,8 +79,7 @@ function PhoneNumber({ number = '' }) {
 }
 
 function Description({ children: description = '' }) {
-  const pattern = /[3689]\d{1,3}\s?\d{4}/g;
-  const jsx = description.replace(pattern, '<PhoneNumber number="$&" />');
+  const jsx = description.replace(phonePattern, '<PhoneNumber number="$&" />');
 
   return (
     <span
@@ -171,6 +172,10 @@ function ImageCard({ pic, title }) {
 
 function ListingCardItem({ listingData }) {
   const [isDescriptionShown, showDescription] = useState(false);
+  const srOnlyDescription = listingData.description.replace(
+    phonePattern,
+    (number) => `${number.substring(0, 4)}XXXX`,
+  );
 
   return (
     <div className="bg-white rounded shadow-2xl" style={{ maxWidth: 544 }}>
@@ -188,7 +193,7 @@ function ListingCardItem({ listingData }) {
           {isDescriptionShown
             ? <Description>{listingData.description}</Description>
             : <DescriptionButton onClick={() => showDescription(true)} />}
-          <span className="sr-only">{listingData.description}</span>
+          <span className="sr-only">{srOnlyDescription}</span>
         </div>
       </div>
     </div>
