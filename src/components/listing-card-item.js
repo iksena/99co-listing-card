@@ -136,7 +136,7 @@ function ImageCard({ pic, title }) {
         <p className="text-xs font-semibold">LAUNCHING SOON</p>
       </div>
       {hover && (
-        <>
+        <div className="z-20">
           <button
             type="button"
             className="absolute inset-y-32 left-1 z-20 ml-3 text-ribbon-text"
@@ -163,7 +163,7 @@ function ImageCard({ pic, title }) {
               priority
             />
           </button>
-        </>
+        </div>
       )}
     </div>
   );
