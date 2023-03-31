@@ -2,7 +2,7 @@ import localFont from 'next/font/local';
 import '@/styles/globals.css';
 
 const avenir = localFont({
-  src: '../fonts/avenir-next.woff',
+  src: '../fonts/avenir-regular.woff2',
   subsets: ['latin'],
   variable: '--font-avenir',
 });
