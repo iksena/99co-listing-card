@@ -11,7 +11,7 @@ function TitleSection({
         <div className="rounded-xl bg-99-icon w-10 h-10 p-px mr-3">
           <Image
             src="/building-icon.svg"
-            alt="Vercel Logo"
+            alt="Building Icon"
             width={40}
             height={40}
             priority
@@ -93,19 +93,78 @@ function Description({ children: description = '' }) {
   );
 }
 
+const useCarousel = (pics) => {
+  const [selectedIndex, selectIndex] = useState(0);
+  const lastIndex = pics.length - 1;
+
+  const onLeftClick = () => selectIndex((prevIndex) => {
+    if (prevIndex === 0) return lastIndex;
+    return prevIndex - 1;
+  });
+
+  const onRightClick = () => selectIndex((prevIndex) => {
+    if (prevIndex === lastIndex) return 0;
+    return prevIndex + 1;
+  });
+
+  return {
+    selectedPic: pics[selectedIndex],
+    onLeftClick,
+    onRightClick,
+  };
+};
+
 function ImageCard({ pic, title }) {
+  const [hover, setHover] = useState(false);
+  const { selectedPic, onLeftClick, onRightClick } = useCarousel(pic);
+
   return (
-    <div className="relative overflow-hidden">
+    <div
+      className="relative overflow-hidden"
+      style={{ maxHeight: 272 }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       <Image
-        src={pic[0]}
+        src={selectedPic}
         alt={title}
-        className="object-cover rounded-t"
+        className="rounded-t object-cover"
         width={544}
         height={272}
       />
       <div className="absolute top-1.5 left-0 z-10 bg-ribbon py-0.5 px-1 text-ribbon-text">
         <p className="text-xs font-semibold">LAUNCHING SOON</p>
       </div>
+      {hover && (
+        <>
+          <button
+            type="button"
+            className="absolute inset-y-32 left-1 z-20 ml-3 text-ribbon-text"
+            onClick={onLeftClick}
+          >
+            <Image
+              src="/chevron-left.svg"
+              alt="Chevron Left"
+              width={28}
+              height={28}
+              priority
+            />
+          </button>
+          <button
+            type="button"
+            className="absolute inset-y-32 right-1 z-20 mr-3 text-ribbon-text"
+            onClick={onRightClick}
+          >
+            <Image
+              src="/chevron-right.svg"
+              alt="Chevron Right"
+              width={28}
+              height={28}
+              priority
+            />
+          </button>
+        </>
+      )}
     </div>
   );
 }
@@ -114,7 +173,7 @@ function ListingCardItem({ listingData }) {
   const [isDescriptionShown, showDescription] = useState(false);
 
   return (
-    <div className="bg-white rounded shadow-2xl max-w-lg">
+    <div className="bg-white rounded shadow-2xl" style={{ maxWidth: 544 }}>
       <ImageCard {...listingData} />
       <div className="p-6">
         <div className="flex flex-col md:flex-row justify-between">
