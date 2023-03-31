@@ -10,8 +10,23 @@ function TitleSection({
 }) {
   return (
     <div>
-      <h2 className="text-2xl font-semibold text-99-dark mb-1">{title}</h2>
-      <p className="text-sm text-99-grey font-normal mb-3">{address}</p>
+      <div className="flex flex-row items-center mb-3">
+        <div className="rounded-xl bg-99-icon w-10 h-10 p-2 mr-3">
+          <Image
+            className="bg-blend-color"
+            src="/building.svg"
+            alt="Vercel Logo"
+            width={40}
+            height={40}
+            color="#FFF"
+            priority
+          />
+        </div>
+        <div>
+          <h2 className="text-2xl font-semibold text-99-dark mb-1">{title}</h2>
+          <p className="text-sm text-99-grey font-normal">{address}</p>
+        </div>
+      </div>
       <p className="text-base text-99-dark font-normal">
         {`${project_type} · ${year} · ${ownership_type}`}
       </p>
@@ -111,7 +126,7 @@ export default function Home({ listingData }) {
             </div>
             <div className="p-6">
               <div className="flex flex-col md:flex-row justify-between">
-                <div className="basis-1 md:basis-1/2 md:mb-4">
+                <div className="basis-1 md:basis-2/3 md:mb-4">
                   <TitleSection {...listingData} />
                 </div>
                 <div className="basis-1 md:basis-1/3 mt-3 mb-3 md:mt-0">
