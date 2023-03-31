@@ -1,7 +1,9 @@
 import Head from 'next/head';
+import Image from 'next/image';
+import { useState } from 'react';
+import JsxParser from 'react-jsx-parser';
 
 import data from '@/lib/data';
-import { useState } from 'react';
 
 function TitleSection({
   title, address, project_type, year, ownership_type, availabilities_label,
@@ -49,44 +51,41 @@ function DescriptionButton({ onClick }) {
   );
 }
 
-function PhoneNumber({ children: number = '' }) {
+function PhoneNumber({ number = '' }) {
   const [isRevealed, reveal] = useState(false);
+  const firstFourNumber = String(number).substring(0, 4);
+
   return (
     <button
       className="text-base text-99-dark font-normal"
       onClick={() => reveal((prevReveal) => !prevReveal)}
       type="button"
     >
-      {isRevealed ? number : `${`${number.charAt(0)}XXX XXX`}`}
+      {isRevealed ? number : `${firstFourNumber}XXXX`}
     </button>
   );
 }
 
 function Description({ children: description = '' }) {
-  const pattern = /^[3689]\d{7}$/;
-  const parts = description.split(pattern);
-
-  console.log(parts);
-  const elements = parts.map((part) => {
-    if (part.match(pattern)) {
-      return <PhoneNumber key={part}>{part}</PhoneNumber>;
-    }
-
-    return part;
-  });
+  const pattern = /[3689]\d{1,3}\s?\d{4}/g;
+  const jsx = description.replace(pattern, '<PhoneNumber number="$&" />');
 
   return (
-    <div
-      aria-hidden
+    <span
       className="text-base text-99-dark font-normal whitespace-pre-wrap break-words"
     >
-      {elements}
-    </div>
+      <JsxParser
+        components={{ PhoneNumber }}
+        jsx={jsx}
+        renderError={({ error }) => (<span>{error}</span>)}
+      />
+    </span>
   );
 }
 
 export default function Home({ listingData }) {
   const [isDescriptionShown, showDescription] = useState(false);
+
   return (
     <>
       <Head>
@@ -99,10 +98,12 @@ export default function Home({ listingData }) {
         <div className="flex justify-center items-center p-3">
           <div className="bg-white rounded shadow-2xl max-w-lg">
             <div className="relative overflow-hidden">
-              <img
+              <Image
                 src={listingData.pic[0]}
                 alt={listingData.title}
                 className="object-cover rounded-t"
+                width={544}
+                height={272}
               />
               <div className="absolute top-1.5 left-0 z-10 bg-ribbon py-0.5 px-1 text-ribbon-text">
                 <p className="text-xs font-semibold">LAUNCHING SOON</p>
@@ -118,12 +119,9 @@ export default function Home({ listingData }) {
                 </div>
               </div>
               <div className="flex flex-row justify-end">
-                {!isDescriptionShown && <DescriptionButton onClick={() => showDescription(true)} />}
-                {isDescriptionShown && (
-                  <Description>
-                    {listingData.description}
-                  </Description>
-                )}
+                {isDescriptionShown
+                  ? <Description>{listingData.description}</Description>
+                  : <DescriptionButton onClick={() => showDescription(true)} />}
                 <span className="sr-only">{listingData.description}</span>
               </div>
             </div>
