@@ -8,9 +8,9 @@ function TitleSection({
   return (
     <div>
       <div className="flex flex-row items-center mb-3">
-        <div className="rounded-xl bg-99-icon w-10 h-10 p-2 mr-3">
+        <div className="rounded-xl bg-99-icon w-10 h-10 p-px mr-3">
           <Image
-            src="/building.svg"
+            src="/building-icon.svg"
             alt="Vercel Logo"
             width={40}
             height={40}
