@@ -121,26 +121,27 @@ function ImageCard({ pic, title }) {
 
   return (
     <div
-      className="relative overflow-hidden"
-      style={{ maxHeight: 272 }}
+      className="relative overflow-y-clip"
+      style={{ height: 272 }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
       <Image
         src={selectedPic}
         alt={title}
-        className="rounded-t object-cover"
+        className="rounded-t object-contain"
         width={544}
         height={272}
       />
-      <div className="absolute top-1.5 left-0 z-10 bg-ribbon py-0.5 px-1 text-ribbon-text">
+      <div className="absolute top-1.5 -left-1 z-30 bg-ribbon py-0.5 px-1 text-white rounded-sm">
         <p className="text-xs font-semibold">LAUNCHING SOON</p>
       </div>
       {hover && (
         <div className="z-20">
+          <div className="absolute inset-0 left-0 z-10 h-full w-16 bg-gradient-to-r from-slate-400 to-0% rounded-t" />
           <button
             type="button"
-            className="absolute inset-y-32 left-1 z-20 ml-3 text-ribbon-text"
+            className="absolute inset-y-32 left-1 z-20 ml-2 text-white"
             onClick={onLeftClick}
           >
             <Image
@@ -151,9 +152,10 @@ function ImageCard({ pic, title }) {
               priority
             />
           </button>
+          <div className="absolute inset-0 left-auto z-10 h-full w-16 bg-gradient-to-l from-slate-400 to-0% rounded-t" />
           <button
             type="button"
-            className="absolute inset-y-32 right-1 z-20 mr-3 text-ribbon-text"
+            className="absolute inset-y-32 right-0 z-20 mr-2 text-white"
             onClick={onRightClick}
           >
             <Image
