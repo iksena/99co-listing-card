@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.arrow-right {
+    width: 0; 
+    height: 0; 
+    border-top: 0.65rem solid transparent;
+    border-bottom: 0.65rem solid transparent;
+    border-left: 0.65rem solid #FF72B6;
+}

@@ -133,9 +133,11 @@ function ImageCard({ pic, title }) {
         width={544}
         height={272}
       />
-      <div className="absolute top-1.5 -left-1 z-30 bg-ribbon py-0.5 px-1 text-white rounded-sm">
-        <p className="text-xs font-semibold">LAUNCHING SOON</p>
+      <div className="absolute top-1.5 -left-1 z-30 flex flex-row">
+        <p className="bg-ribbon py-0.5 px-1 text-white rounded-tl-sm text-xs font-semibold">LAUNCHING SOON</p>
+        <div className="arrow-right" />
       </div>
+      <div className="absolute top-6 -left-1 -z-10 bg-ribbon-shadow h-1 w-2 rounded-bl-sm" />
       {hover && (
         <div className="z-20">
           <div className="absolute inset-0 left-0 z-10 h-full w-16 bg-gradient-to-r from-slate-400 to-0% rounded-t" />

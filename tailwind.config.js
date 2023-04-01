@@ -16,6 +16,7 @@ module.exports = {
         '99-link': '#216BFF',
         '99-icon': '#98BAFC',
         ribbon: '#FF72B6',
+        'ribbon-shadow': '#CE367F',
       },
     },
 
