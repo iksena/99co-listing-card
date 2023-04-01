@@ -115,6 +115,53 @@ const useCarousel = (pics) => {
   };
 };
 
+function CarouselHandlerOverlay({ onLeftClick, onRightClick }) {
+  return (
+    <div className="z-20">
+      <div className="absolute inset-0 left-0 z-10 h-full w-16 bg-gradient-to-r from-slate-400 to-0% rounded-t" />
+      <button
+        type="button"
+        className="absolute inset-y-32 left-1 z-20 ml-2 text-white"
+        onClick={onLeftClick}
+      >
+        <Image
+          src="/chevron-left.svg"
+          alt="Chevron Left"
+          width={28}
+          height={28}
+          priority
+        />
+      </button>
+      <div className="absolute inset-0 left-auto z-10 h-full w-16 bg-gradient-to-l from-slate-400 to-0% rounded-t" />
+      <button
+        type="button"
+        className="absolute inset-y-32 right-0 z-20 mr-2 text-white"
+        onClick={onRightClick}
+      >
+        <Image
+          src="/chevron-right.svg"
+          alt="Chevron Right"
+          width={28}
+          height={28}
+          priority
+        />
+      </button>
+    </div>
+  );
+}
+
+function Ribbon() {
+  return (
+    <>
+      <div className="absolute top-1.5 -left-1 z-30 flex flex-row">
+        <p className="bg-ribbon py-0.5 px-1 text-white rounded-tl-sm text-xs font-semibold">LAUNCHING SOON</p>
+        <div className="arrow-right" />
+      </div>
+      <div className="absolute top-5 -left-1 -z-10 bg-ribbon-shadow h-2.5 w-2 rounded-bl-sm" />
+    </>
+  );
+}
+
 function ImageCard({ pic, title }) {
   const [hover, setHover] = useState(false);
   const { selectedPic, onLeftClick, onRightClick } = useCarousel(pic);
@@ -133,43 +180,8 @@ function ImageCard({ pic, title }) {
         width={544}
         height={272}
       />
-      <div className="absolute top-1.5 -left-1 z-30 flex flex-row">
-        <p className="bg-ribbon py-0.5 px-1 text-white rounded-tl-sm text-xs font-semibold">LAUNCHING SOON</p>
-        <div className="arrow-right" />
-      </div>
-      <div className="absolute top-6 -left-1 -z-10 bg-ribbon-shadow h-1 w-2 rounded-bl-sm" />
-      {hover && (
-        <div className="z-20">
-          <div className="absolute inset-0 left-0 z-10 h-full w-16 bg-gradient-to-r from-slate-400 to-0% rounded-t" />
-          <button
-            type="button"
-            className="absolute inset-y-32 left-1 z-20 ml-2 text-white"
-            onClick={onLeftClick}
-          >
-            <Image
-              src="/chevron-left.svg"
-              alt="Chevron Left"
-              width={28}
-              height={28}
-              priority
-            />
-          </button>
-          <div className="absolute inset-0 left-auto z-10 h-full w-16 bg-gradient-to-l from-slate-400 to-0% rounded-t" />
-          <button
-            type="button"
-            className="absolute inset-y-32 right-0 z-20 mr-2 text-white"
-            onClick={onRightClick}
-          >
-            <Image
-              src="/chevron-right.svg"
-              alt="Chevron Right"
-              width={28}
-              height={28}
-              priority
-            />
-          </button>
-        </div>
-      )}
+      <Ribbon />
+      {hover && <CarouselHandlerOverlay onLeftClick={onLeftClick} onRightClick={onRightClick} />}
     </div>
   );
 }
